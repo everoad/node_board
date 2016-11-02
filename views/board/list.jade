@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1")
+    meta(name="description",content="")
+    meta(name="author",content="")
+    link(rel="icon",href="../../favicon.ico")
+    title title
+    block styles
+      link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+    block scripts
+      script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
+      script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+  body
+    include ../templates/header.jade
+    div.container
+      table(style='text-align:center;').table
+        tr
+          td No
+          td Title
+          td Author
+          td Created
+        -each data, i in list
+          tr
+            td #{no - i}
+            td
+              a(href=`/board/view?bd_id=${data.bd_id}`)= data.bd_title
+            td= data.mb_nick
+            td= data.bd_wdate
+      div
+        form(action='/board/list')
+          select(name='stype')
+            option(value='bd_title') 제목
+            option(value='bd_content') 내용
+            option(value='mb_nick') 작성자
+          input(type='text' name='skey' placeholder='Search..')
+          input(type='submit' value='검색')
+      div
+        a(href='/board/write') 글쓰기
+    include ../templates/footer.jade

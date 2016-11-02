@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+  body
+    include ../templates/header.jade
+    div
+      form(action='/board/write' method='post' enctype='multipart/form-data')
+        input(type='text' name='bd_title' placeholder='Title..')
+        br
+        textarea(name='bd_content' placeholder='Content..')
+        br
+        input(type='file' name='photos' multiple)
+        br
+        input(type='submit' value='완료')
+      
+    include ../templates/footer.jade
+      

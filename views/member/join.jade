@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+  body
+    include ../templates/header.jade    
+    div
+      form(action='/member/join' method='post')
+        input(type='text' name='mb_email' placeholder='Email...')
+        br
+        input(type='text' name='mb_nick' placeholder='Nickname...')
+        br
+        input(type='password' name='mb_pwd' placeholder='Password...' id='mb_pwd')
+        br
+        input(type='password' placeholder='Password confirm..' id='mb_pwd_cf')
+        br
+        input(type='submit' value='가입')
+      
+      
+    
+    include ../templates/footer.jade
+      

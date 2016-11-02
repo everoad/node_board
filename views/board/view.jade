@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport",content="width=device-width, initial-scale=1")
+    meta(name="description",content="")
+    meta(name="author",content="")
+    link(rel="icon",href="../../favicon.ico")
+    title title
+    block styles
+      link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+      link(href='/lib/fotorama-4.6.4/fotorama.css' rel="stylesheet")
+    block scripts
+      script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
+      script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+      script(src='/lib/fotorama-4.6.4/fotorama.js' type="text/javascript")
+      script(src='/js/comment.js' type="text/javascript")
+    script.
+      $(function() {
+        Comment.initComment({
+          isLogin: '#{session.isLogin}',
+          bd_id: #{data.bd_id},
+          mb_id: '#{session.mb_id}'
+        });
+      });
+  body
+    include ../templates/header.jade
+    div(class='container')
+      table(class='table' style='text-align:center;')
+        tr
+          td(colspan='2')= data.bd_title
+        tr  
+          td(class='col-md-4')= data.mb_nick
+          td(class='col=md-8')= data.bd_wdate
+        tr
+          td(colspan='2')= data.bd_content
+        tr
+          td(colspan='2')
+            div.fotorama
+              -each image in images
+               img(src=`/uploads/${image.img_name}` width='500px')
+      div
+        -if(data.mb_id === session.mb_id)
+          a(href=`/board/delete?bd_id=${data.bd_id}`) 삭제 | 
+          a(href=`/board/edit?bd_id=${data.bd_id}`) 수정 | 
+        a(href='/board/list') 목록
+      div.comment
+        textarea(id='cmt_content')
+        button(id='cmt_write') 작성
+        div.cmt_list
+    
+    include ../templates/footer.jade

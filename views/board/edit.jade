@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+  body
+    include ../templates/header.jade
+    div
+      form(action='/board/edit' method='post')
+        input(type='text' name='bd_title' placeholder='Title..' value=`${data.bd_title}`)
+        br
+        textarea(name='bd_content' placeholder='Content..') #{data.bd_content}
+        br
+        input(type='hidden' name='bd_id' value=`${data.bd_id}`)
+        input(type='submit' value='완료')
+      
+    include ../templates/footer.jade
+      
+    
+  

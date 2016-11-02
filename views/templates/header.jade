@@ -1,0 +1,7 @@
+div header
+div
+  -if(session.isLogin == null)
+    a(href="/member/join") 회원가입 | 
+    a(href='/member/login?redirect=' + req.originalUrl) 로그인
+  -else
+    a(href='/member/logout') 로그아웃

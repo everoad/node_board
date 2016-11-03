@@ -60,7 +60,7 @@ router.route('/write')
   });
 });
 
-router.get('/view/:bd_id', (req, res) => {
+router.get('/view/:bd_id/', (req, res) => {
   boardModel.getView([req.params.bd_id], (rows) => {
     imageModel.getImageList([req.params.bd_id], (images) => {
       res.render('board/view', { data: rows, images: images });
@@ -91,31 +91,38 @@ router.route('/edit')
   });
 });
 
-router.get('/getComment', (req, res) => {
-  console.log('router getComment', req.query.bd_id);
+
+router.get('/comment', (req, res) => {
   boardModel.getComment([req.query.bd_id], (rows) => {
     res.send(rows);
   });
 });
 
-router.post('/writeComment', (req, res) => {
+
+router.post('/comment', (req, res) => {
   var bd_id = req.body.bd_id;
   var cmt_content = req.body.cmt_content;
   var cmt_author = req.session.mb_id;
   boardModel.writeComment([cmt_content, cmt_author, bd_id], (insertId) => {
     console.log(insertId);
-    res.redirect('/board/getComment?bd_id=' + bd_id);
+    res.redirect('/board/comment?bd_id=' + bd_id);
   });
 });
 
-router.post('/deleteComment', (req, res) => {
-  var cmt_id = req.body.cmt_id;
-  var bd_id = req.body.bd_id;
-  console.log(cmt_id, bd_id);
-  boardModel.deleteComment([cmt_id], (afftectedRows) => {
-    console.log('affected', afftectedRows);
-    res.redirect('/board/getComment?bd_id=' + bd_id);
+router.delete('/comment/:cmt_id/:bd_id', (req, res) => {
+  var cmt_id = req.params.cmt_id;
+  var bd_id = req.params.bd_id;
+  console.log('asdf', cmt_id, bd_id);
+  boardModel.deleteComment([cmt_id], (affectedRows) => {
+    console.log('affectedRows', affectedRows);
+    if(affectedRows == 0) {
+      res.json({ result: false });
+    } else {
+      console.log("sadfklasjdfjsaldkf");
+      res.json({ result: 'true' });
+    }
   });
 });
+
 
 module.exports = router;

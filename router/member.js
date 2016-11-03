@@ -19,7 +19,7 @@ router.route('/join')
   });
 });
 
-router.route('/login')
+router.route(['/login', '/login/:id'])
 .get((req, res) => {
   res.render('member/login', { redirect: req.query.redirect });
 })
@@ -41,6 +41,10 @@ router.route('/login')
       });
     }
   });
+})
+.put((req, res) => {
+  console.log(req.params.id);
+  console.log('putput!!');
 });
 
 router.get('/logout', (req, res) => {

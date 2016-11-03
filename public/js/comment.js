@@ -2,25 +2,28 @@ var Comment = function () {
 
   return {
     initComment: function (obj) {
-
-      $.get('/board/getComment', { bd_id: obj.bd_id }, (datas) => {
-        showCmtList(datas);
-      }).fail(() => { alert('fail'); });
-
+      init();
+      function init() {
+        $.get('/board/comment', { bd_id: obj.bd_id }, (datas) => {
+          showCmtList(datas);
+        }).fail(() => { alert('fail'); });
+      };
       $('#cmt_write').on('click', function(e) {
         if(obj.isLogin === '') {
           location.href='/member/login?redirect=' + location.pathname;
           return;
         }
-        $.post('/board/writeComment', {mb_id: obj.mb_id, bd_id: obj.bd_id, cmt_content: $('#cmt_content').val() }, (datas) => {
+        $.post('/board/comment', {mb_id: obj.mb_id, bd_id: obj.bd_id, cmt_content: $('#cmt_content').val() }, (datas) => {
           showCmtList(datas);
           $('#cmt_content').val('');
         }).fail(() => { alert('fail'); });
       });
 
       $(document).on('click', '#cmt_delete', function(e) {
-        $.post('/board/deleteComment', { cmt_id: $(this).attr('data-id'), bd_id: obj.bd_id }, (datas) => {
-          showCmtList(datas);
+        console.log("ajax");
+        $.ajax('/board/comment/'+$(this).attr('data-id') + '/' + obj.bd_id, { method: 'DELETE' }, function(datas) {
+          console.log("dlete: " + datas['result']);
+
         }).fail(() => { alert('fail'); });
       });
 
@@ -34,5 +37,13 @@ var Comment = function () {
       }
     }
   };
+  $.ajax({
+    success: function(data) {
+
+    },
+    error: function() {
+
+    }
+  })
 
 }();

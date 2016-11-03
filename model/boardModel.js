@@ -23,7 +23,7 @@ exports.getList = function(search, params, callback) {
   if(search[0] && search[1]) {
     sql = attachSearchSql(sql, search);
   }
-  sql += 'ORDER BY bd_id LIMIT ?, ?';
+  sql += 'ORDER BY bd_id DESC LIMIT ?, ?';
   conn.query(sql, params, (err, rows, fields) => {
     if(err) { throw err; }
     callback(rows);

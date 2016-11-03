@@ -10,7 +10,7 @@ var config_db = require('./config/db_config');
 var sessionStore = new MySQLStore(config_db);
 require('express-dynamic-helpers-patch')(app);
 //Router
-var board = require('./router/board.js');
+var board = require('./router/board_rest.js');
 var member = require('./router/member');
 
 app.dynamicHelpers({

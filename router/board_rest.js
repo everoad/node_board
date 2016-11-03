@@ -14,13 +14,13 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-router.use(['/write', '/delete', '/edit'], (req, res, next) => {
-  if(!req.session.isLogin)
-    res.redirect('/member/login?redirect=' + req.originalUrl);
-  next();
-});
+// router.use(['/write', '/delete', '/edit'], (req, res, next) => {
+//   if(!req.session.isLogin)
+//     res.redirect('/member/login?redirect=' + req.originalUrl);
+//   next();
+// });
 
-router.get('/list', (req, res) => {
+router.get('/', (req, res) => {
   var index = req.query.index;
   index = (index == null) ? 1 : parseInt(index);
 
@@ -35,16 +35,37 @@ router.get('/list', (req, res) => {
     var no = totalDataNum - (1 - index) * totalPage;
 
     boardModel.getList([stype, skey], [start, dataPerPage], (rows) => {
-      res.render('board/list', { list: rows, no: no, index: index });
+      res.render('board/list_rest', { list: rows, no: no, index: index });
     });
   });
 });
 
-router.route('/write')
-.get((req, res) => {
-  res.render('board/write');
-})
-.post(upload.array('photos', 12), (req, res) => {
+router.get('/write', (req, res) => {
+  res.render('board/write_rest');
+});
+
+router.get('/edit', (req, res) => {
+  boardModel.getView([req.query.bd_id], (rows) => {
+    res.render('board/edit_rest', { data: rows });
+  });
+});
+
+router.get('/:bd_id', (req, res) => {
+  boardModel.getView([req.params.bd_id], (rows) => {
+    imageModel.getImageList([req.params.bd_id], (images) => {
+      res.render('board/view_rest', { data: rows, images: images });
+    });
+  });
+});
+
+router.delete('/:bd_id', (req, res) => {
+  boardModel.delete([req.params.bd_id], (affectedRows) => {
+    console.log(affectedRows);
+    res.redirect('/board/list');
+  });
+});
+
+router.post('/', upload.array('photos', 12), (req, res) => {
   var params = Object.keys(req.body).map((key) => {
     return req.body[key];
   });
@@ -55,70 +76,48 @@ router.route('/write')
       return [file.originalname, insertId];
     });
     imageModel.uploadIamge(params, (results) => {
-      res.redirect('/board/view?bd_id=' + insertId);
+      res.redirect('/board/' + insertId);
     });
   });
 });
 
-router.get('/view/:bd_id/', (req, res) => {
-  boardModel.getView([req.params.bd_id], (rows) => {
-    imageModel.getImageList([req.params.bd_id], (images) => {
-      res.render('board/view', { data: rows, images: images });
-    });
-  });
-});
-
-router.get('/delete', (req, res) => {
-  boardModel.delete([req.query.bd_id], (affectedRows) => {
-    console.log(affectedRows);
-    res.redirect('/board/list');
-  });
-});
-
-router.route('/edit')
-.get((req, res) => {
-  boardModel.getView([req.query.bd_id], (rows) => {
-    res.render('board/edit', { data: rows });
-  });
-})
-.post((req, res) => {
+router.put('/:bd_id', (req, res) => {
   var params = Object.keys(req.body).map((key) => {
     return req.body[key];
   });
+  params.push(req.params.bd_id);
   boardModel.edit(params, (changedRows) => {
     console.log(changedRows);
-    res.redirect('/board/view?bd_id=' + req.body.bd_id);
+    res.redirect('/board/' + req.body.bd_id);
   });
 });
 
-
-router.get('/comment', (req, res) => {
-  boardModel.getComment([req.query.bd_id], (rows) => {
+//코멘트 리스트 가져오기.
+router.get('/:bd_id/comment', (req, res) => {
+  boardModel.getComment([req.params.bd_id], (rows) => {
     res.send(rows);
   });
 });
 
-
-router.post('/comment', (req, res) => {
-  var bd_id = req.body.bd_id;
+//코멘트 쓰기
+router.post('/:bd_id/comment', (req, res) => {
+  var bd_id = req.params.bd_id;
   var cmt_content = req.body.cmt_content;
   var cmt_author = req.session.mb_id;
   boardModel.writeComment([cmt_content, cmt_author, bd_id], (insertId) => {
     console.log(insertId);
-    res.redirect('/board/comment?bd_id=' + bd_id);
+    res.redirect(`/board/${bd_id}/comment`);
   });
 });
 
-router.delete('/comment/:cmt_id/:bd_id', (req, res) => {
-  var cmt_id = req.params.cmt_id;
+//코멘트 삭제
+router.delete('/:bd_id/comment', (req, res) => {
+  var cmt_id = req.body.cmt_id;
   var bd_id = req.params.bd_id;
-  console.log('asdf', cmt_id, bd_id);
   boardModel.deleteComment([cmt_id], (affectedRows) => {
-    console.log('affectedRows', affectedRows);
     if(affectedRows == 0) {
       res.json({ result: false });
     } else {
-      console.log("sadfklasjdfjsaldkf");
       res.json({ result: true });
     }
   });

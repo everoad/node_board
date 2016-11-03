@@ -1,7 +1,13 @@
-div header
-div
-  -if(session.isLogin == null)
-    a(href="/member/join") 회원가입 | 
-    a(href='/member/login?redirect=' + req.originalUrl) 로그인
-  -else
-    a(href='/member/logout') 로그아웃
+nav(class="navbar navbar-default navbar-fixed-top")
+  div(class="container")
+    ul(class='nav navbar-nav')
+      li
+        a(href='/list' class='navbar-brand') Board
+      -if(session.isLogin == null)  
+        li
+          a(href='/member/login?redirect=' + req.originalUrl) 로그인 
+        li
+          a(href="/member/join") 회원가입
+      -else
+        li
+          a(href='/member/logout') 로그아웃

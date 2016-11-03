@@ -2,19 +2,34 @@ doctype html
 html
   head
     meta(charset='utf-8')
+  
+    block styles
+      link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+    style.
+      .check {
+        height: 20px;
+      }
+    block scripts
+      script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
+      script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+      script(src='/js/join_val_check.js' type='text/javascript')
+    script.
+      $(function() {
+        JoinValueCheck.joinValueCheck();
+      });
   body
     include ../templates/header.jade    
-    div
+    div.container
       form(action='/member/join' method='post')
-        input(type='text' name='mb_email' placeholder='Email...')
+        input(type='text' name='mb_email' placeholder='Email...' id='mb_email')
+        div#email_check.check
+        input(type='text' name='mb_nick' placeholder='Nickname...' id='mb_nick')
+        div#nick_check.check
+        input(type='password' name='mb_pwd' placeholder='Password...' id='mb_pwd' class='pwd')
         br
-        input(type='text' name='mb_nick' placeholder='Nickname...')
-        br
-        input(type='password' name='mb_pwd' placeholder='Password...' id='mb_pwd')
-        br
-        input(type='password' placeholder='Password confirm..' id='mb_pwd_cf')
-        br
-        input(type='submit' value='가입')
+        input(type='password' placeholder='Password confirm..' id='mb_pwd_cf' class='pwd')
+        div#pwd_check.check
+        input(type='submit' value='가입' id='submit')
       
       
     

@@ -15,3 +15,20 @@ exports.login = function(params, callback) {
     callback(rows[0]);
   });
 }
+
+
+exports.nickCheck = function(params, callback) {
+  var sql = 'SELECT mb_id FROM member WHERE mb_nick = ?';
+  conn.query(sql, params, (err, rows, fields) => {
+    if(err) { throw err; }
+    callback(rows[0]);
+  });
+}
+
+exports.checkEmail = function(params, callback) {
+  var sql = 'SELECT mb_id FROM member WHERE mb_email = ?';
+  conn.query(sql, params, (err, rows, fields) => {
+    if(err) { throw err; }
+    callback(rows[0]);
+  });
+}

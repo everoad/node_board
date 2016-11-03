@@ -60,9 +60,9 @@ router.route('/write')
   });
 });
 
-router.get('/view', (req, res) => {
-  boardModel.getView([req.query.bd_id], (rows) => {
-    imageModel.getImageList([req.query.bd_id], (images) => {
+router.get('/view/:bd_id', (req, res) => {
+  boardModel.getView([req.params.bd_id], (rows) => {
+    imageModel.getImageList([req.params.bd_id], (images) => {
       res.render('board/view', { data: rows, images: images });
     });
   });

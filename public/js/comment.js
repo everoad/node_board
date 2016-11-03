@@ -9,7 +9,7 @@ var Comment = function () {
 
       $('#cmt_write').on('click', function(e) {
         if(obj.isLogin === '') {
-          location.href='/member/login';
+          location.href='/member/login?redirect=' + location.pathname;
           return;
         }
         $.post('/board/writeComment', {mb_id: obj.mb_id, bd_id: obj.bd_id, cmt_content: $('#cmt_content').val() }, (datas) => {

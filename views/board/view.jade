@@ -27,7 +27,7 @@ html
   body
     include ../templates/header.jade
     div(class='container')
-      table(class='table' style='text-align:center;')
+      table(class='table' style='text-align:center;width:100%;')
         tr
           td(colspan='2')= data.bd_title
         tr  
@@ -39,15 +39,17 @@ html
           td(colspan='2')
             div.fotorama
               -each image in images
-               img(src=`/uploads/${image.img_name}` width='500px')
+               img(src=`/uploads/${image.img_name}` width='100%')
       div
         -if(data.mb_id === session.mb_id)
           a(href=`/board/delete?bd_id=${data.bd_id}`) 삭제 | 
           a(href=`/board/edit?bd_id=${data.bd_id}`) 수정 | 
         a(href='/board/list') 목록
+    
       div.comment
-        textarea(id='cmt_content')
-        button(id='cmt_write') 작성
+        div.form.group
+          textarea(id='cmt_content' class='form-control' style='resize: none;')
+          button(id='cmt_write' class='btn btn-primary') 작성
         div.cmt_list
     
     include ../templates/footer.jade

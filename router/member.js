@@ -53,4 +53,27 @@ router.get('/logout', (req, res) => {
   });
 });
 
+router.post('/nickCheck', (req, res) => {
+  let mb_nick = req.body.mb_nick;
+  memberModel.nickCheck([mb_nick], (rows) => {
+    if(rows) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+});
+
+
+router.post('/checkEmail', (req, res) => {
+  let mb_email = req.body.mb_email;
+  memberModel.checkEmail([mb_email] , (rows) => {
+    if(rows) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+})
+
 module.exports = router;

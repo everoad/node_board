@@ -10,11 +10,11 @@ html
     title title
     block styles
       link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
-      link(href='/lib/fotorama-4.6.4/fotorama.css' rel="stylesheet")
+      link(href='http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css' rel="stylesheet")
     block scripts
       script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
       script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
-      script(src='/lib/fotorama-4.6.4/fotorama.js' type="text/javascript")
+      script(src='http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js' type="text/javascript")
       script(src='/js/comment.js' type="text/javascript")
     script.
       $(function() {
@@ -24,22 +24,22 @@ html
           mb_id: '#{session.mb_id}'
         });
       });
-  body
+  body(data-spy="scroll",data-target=".scrollspy")
     include ../templates/header.jade
     div(class='container')
-      table(class='table' style='text-align:center;width:100%;')
+      table(class='table' style='text-align:center;background:white;')
         tr
           td(colspan='2')= data.bd_title
         tr  
-          td(class='col-md-4')= data.mb_nick
-          td(class='col=md-8')= data.bd_wdate
+          td= data.mb_nick
+          td= data.bd_wdate
         tr
           td(colspan='2')= data.bd_content
         tr
           td(colspan='2')
-            div.fotorama
+            div(class="fotorama" data-nav="thumbs" data-width="100%" data-ratio="800/600" style='background:black')
               -each image in images
-               img(src=`/uploads/${image.img_name}` width='100%')
+               img(src=`/uploads/${image.img_name}`)
       div
         -if(data.mb_id === session.mb_id)
           a(href=`/board/delete?bd_id=${data.bd_id}`) 삭제 | 
@@ -48,8 +48,8 @@ html
     
       div.comment
         div.form.group
-          textarea(id='cmt_content' class='form-control' style='resize: none;')
+          textarea(id='cmt_content' class='form-control' style='resize: none;' rows='5')
           button(id='cmt_write' class='btn btn-primary') 작성
         div.cmt_list
-    
+  
     include ../templates/footer.jade
